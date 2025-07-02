@@ -1,4 +1,4 @@
-package com.UnFoldCR.tienda;
+package com.UnFold;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
