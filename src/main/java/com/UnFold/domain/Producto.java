@@ -1,6 +1,6 @@
 
 
-package com.UnFoldCR.domain; 
+package com.UnFold.domain; 
 
 import jakarta.persistence.*;
 import java.io.Serializable;

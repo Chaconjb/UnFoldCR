@@ -1,7 +1,7 @@
 
-package com.UnFoldCR.repository;
+package com.UnFold.repository;
 
-import com.UnFoldCR.domain.Usuario; 
+import com.UnFold.domain.Usuario; 
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
