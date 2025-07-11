@@ -26,4 +26,5 @@ public class Producto implements Serializable {
     private int existencias;
     private String rutaImagen;
     private boolean activo;
+    private String producto;
 }

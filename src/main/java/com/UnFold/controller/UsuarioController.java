@@ -1,10 +1,8 @@
 package com.UnFold.controller;
 
 import com.UnFold.domain.Usuario;
-import com.UnFold.domain.Usuario;
 import com.UnFold.service.UsuarioService;
-import com.UnFold.service.UsuarioService;
-import com.UnFold.service.FirebaseStorageService;
+import com.UnFold.service.FirebaseStorageService; // Si los usuarios tendrán foto de perfil
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,138 +12,75 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes; // Para mensajes de éxito/error en redirecciones
-
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Controller
-@RequestMapping("/usuario")
-@Slf4j
+@RequestMapping("/usuario") // Mapeo para /usuario
+@Slf4j // Para logging
 public class UsuarioController {
 
     @Autowired
-    private UsuarioService usuarioService;
+    private UsuarioService usuarioService; // Inyección del servicio de Usuario
 
     @Autowired
-    private UsuarioService usuarioService;
+    private FirebaseStorageService firebaseStorageService; // Si los usuarios pueden tener imagen/foto de perfil
 
-    @Autowired
-    private FirebaseStorageService firebaseStorageService;
-
+    // Muestra el listado de usuarios (para administración)
     @GetMapping("/listado")
     public String listado(Model model) {
-        log.info("Accediendo al listado de categorías para administración.");
-        var usuarios = usuarioService.getUsuarios(false);
+        log.info("Accediendo al listado de usuarios para administración.");
+        var usuarios = usuarioService.getUsuarios(false); // Obtener todos los usuarios (activos o no)
         model.addAttribute("usuarios", usuarios);
         model.addAttribute("totalUsuarios", usuarios.size());
-        model.addAttribute("usuario", new Usuario());
-        return "usuario/admin_listado";
+        model.addAttribute("usuario", new Usuario()); // Objeto para el formulario de agregar
+        return "usuario/listado"; // Apunta al listado de usuarios
     }
 
+    // Guarda un usuario (nuevo o existente)
     @PostMapping("/guardar")
     public String guardarUsuario(Usuario usuario,
-            @RequestParam("imagenFile") MultipartFile imagenFile,
+            @RequestParam("imagenFile") MultipartFile imagenFile, // Si los usuarios pueden tener imagen
             RedirectAttributes redirectAttributes) {
-        log.info("Intentando guardar categoría: " + usuario.getDescripcion());
+        log.info("Intentando guardar usuario: " + usuario.getUsername()); // Usamos username como identificador
         try {
-            usuarioService.save(usuario);
+            usuarioService.save(usuario); // Guarda el usuario primero para obtener un ID si es nuevo
+
             if (!imagenFile.isEmpty()) {
+                // Genera la ruta de la imagen usando el ID del usuario
+                // Asumo que tienes un idUsuario o un username único para usar en la ruta
                 String rutaImagen = firebaseStorageService.cargaImagen(imagenFile, "usuarios", usuario.getIdUsuario());
                 usuario.setRutaImagen(rutaImagen);
-                usuarioService.save(usuario);
+                usuarioService.save(usuario); // Vuelve a guardar para actualizar la ruta de la imagen
             }
-            redirectAttributes.addFlashAttribute("todoOk", "Categoría guardada exitosamente!");
+            redirectAttributes.addFlashAttribute("todoOk", "Usuario guardado exitosamente!");
         } catch (Exception e) {
-            log.error("Error al guardar categoría: " + e.getMessage());
-            redirectAttributes.addFlashAttribute("error", "Error al guardar categoría: " + e.getMessage());
+            log.error("Error al guardar usuario: " + e.getMessage());
+            redirectAttributes.addFlashAttribute("error", "Error al guardar usuario: " + e.getMessage());
         }
-        return "redirect:/usuario/listado";
+        return "redirect:/usuario/listado"; // Redirige al listado de usuarios
     }
 
+    // Elimina un usuario
     @PostMapping("/eliminar")
     public String eliminarUsuario(Usuario usuario, RedirectAttributes redirectAttributes) {
-        log.info("Intentando eliminar categoría con ID: " + usuario.getIdUsuario());
+        log.info("Intentando eliminar usuario con ID: " + usuario.getIdUsuario());
         try {
             usuarioService.delete(usuario);
-            redirectAttributes.addFlashAttribute("todoOk", "Categoría eliminada exitosamente!");
+            redirectAttributes.addFlashAttribute("todoOk", "Usuario eliminado exitosamente!");
         } catch (Exception e) {
-            log.error("Error al eliminar categoría: " + e.getMessage());
-            redirectAttributes.addFlashAttribute("error", "Error al eliminar categoría: " + e.getMessage());
+            log.error("Error al eliminar usuario: " + e.getMessage());
+            redirectAttributes.addFlashAttribute("error", "Error al eliminar usuario: " + e.getMessage());
         }
-        return "redirect:/usuario/listado";
+        return "redirect:/usuario/listado"; // Redirige al listado de usuarios
     }
 
+    // Carga un usuario para modificación
     @GetMapping("/modificar/{idUsuario}")
     public String modificarUsuario(Usuario usuario, Model model) {
-        log.info("Cargando categoría para modificación con ID: " + usuario.getIdUsuario());
-        usuario = usuarioService.getUsuario(usuario);
+        log.info("Cargando usuario para modificación con ID: " + usuario.getIdUsuario());
+        usuario = usuarioService.getUsuario(usuario); // Obtener el usuario por ID
         model.addAttribute("usuario", usuario);
-        return "usuario/modifica";
-    }
-
-    @GetMapping("/visual")
-    public String visualCategories(Model model) {
-        log.info("Cargando la vista visual de categorías (pública).");
-
-        List<Usuario> allActiveProducts = usuarioService.getUsuarios(true);
-
-        model.addAttribute("usuariosHombre", allActiveProducts.stream()
-                .filter(p -> p.getUsuario() != null && "Hombre".equalsIgnoreCase(p.getUsuario().getDescripcion()))
-                .limit(4)
-                .collect(Collectors.toList()));
-
-        model.addAttribute("usuariosMujer", allActiveProducts.stream()
-                .filter(p -> p.getUsuario() != null && "Mujer".equalsIgnoreCase(p.getUsuario().getDescripcion()))
-                .limit(4)
-                .collect(Collectors.toList()));
-
-        model.addAttribute("usuariosNinos", allActiveProducts.stream()
-                .filter(p -> p.getUsuario() != null && "Niños".equalsIgnoreCase(p.getUsuario().getDescripcion()))
-                .limit(4)
-                .collect(Collectors.toList()));
-
-        model.addAttribute("usuariosAccesorios", allActiveProducts.stream()
-                .filter(p -> p.getUsuario() != null && "Accesorios".equalsIgnoreCase(p.getUsuario().getDescripcion()))
-                .limit(4)
-                .collect(Collectors.toList()));
-
-        return "usuario/visual";
-    }
-
-    @GetMapping("/hombre")
-    public String usuarioHombre(Model model) {
-        log.info("Accediendo a la categoría Hombre.");
-        List<Usuario> usuarios = usuarioService.getUsuariosByUsuarioDescripcion("Hombre", true);
-        model.addAttribute("usuarios", usuarios);
-        model.addAttribute("usuarioNombre", "Hombre");
-        return "usuario/usuario_detalle";
-    }
-
-    @GetMapping("/mujer")
-    public String usuarioMujer(Model model) {
-        log.info("Accediendo a la categoría Mujer.");
-        List<Usuario> usuarios = usuarioService.getUsuariosByUsuarioDescripcion("Mujer", true);
-        model.addAttribute("usuarios", usuarios);
-        model.addAttribute("usuarioNombre", "Mujer");
-        return "usuario/usuario_detalle";
-    }
-
-    @GetMapping("/ninos")
-    public String usuarioNinos(Model model) {
-        log.info("Accediendo a la categoría Niños.");
-        List<Usuario> usuarios = usuarioService.getUsuariosByUsuarioDescripcion("Niños", true);
-        model.addAttribute("usuarios", usuarios);
-        model.addAttribute("usuarioNombre", "Niños");
-        return "usuario/usuario_detalle";
-    }
-
-    @GetMapping("/accesorios")
-    public String usuarioAccesorios(Model model) {
-        log.info("Accediendo a la categoría Accesorios.");
-        List<Usuario> usuarios = usuarioService.getUsuariosByUsuarioDescripcion("Accesorios", true);
-        model.addAttribute("usuarios", usuarios);
-        model.addAttribute("usuarioNombre", "Accesorios");
-        return "usuario/usuario_detalle";
+        return "usuario/modifica"; // Apunta a la vista de modificación de usuario
     }
 }
