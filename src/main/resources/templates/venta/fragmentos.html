@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+    <head th:replace="~{layout/plantilla :: head}"/>
+<body>
+
+    <section th:fragment="agregarVenta" class="py-3">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3">
+                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#agregarVentaModal">
+                        <i class="fas fa-plus"></i> [[#{accion.agregar}]] [[#{venta.titulo}]]
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="agregarVentaModal" tabindex="-1" aria-labelledby="agregarVentaModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header bg-info text-white">
+                        <h5 class="modal-title" id="agregarVentaModalLabel">[[#{venta.agregar.titulo}]]</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <form method="post" th:action="@{/venta/guardar}" th:object="${venta}">
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label for="fechaVenta">[[#{venta.fechaVenta}]]</label>
+                                <input type="datetime-local" class="form-control" name="fechaVenta" th:field="*{fechaVenta}" required="true"/>
+                            </div>
+                            <div class="mb-3">
+                                <label for="total">[[#{venta.total}]]</label>
+                                <input type="number" step="0.01" class="form-control" name="total" th:field="*{total}" required="true"/>
+                            </div>
+                            <div class="mb-3">
+                                <label for="estado">[[#{venta.estado}]]</label>
+                                <input type="text" class="form-control" name="estado" th:field="*{estado}"/>
+                            </div>
+                            <div class="mb-3">
+                                <label for="usuario">[[#{venta.usuario}]]</label>
+                                <select class="form-select" name="usuario.idUsuario" th:field="*{usuario.idUsuario}">
+                                    <option value="">-- Seleccione un usuario --</option>
+                                    <option th:each="user : ${usuarios}"
+                                            th:value="${user.idUsuario}"
+                                            th:text="${user.username}">
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-primary" type="submit">[[#{accion.guardar}]]</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section th:fragment="listadoVentas" class="py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div th:if="${ventas != null and !ventas.empty}">
+                        <table class="table table-striped table-hover">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th>[[#{venta.idVenta}]]</th>
+                                    <th>[[#{venta.fechaVenta}]]</th>
+                                    <th>[[#{venta.total}]]</th>
+                                    <th>[[#{venta.estado}]]</th>
+                                    <th>[[#{venta.usuario}]]</th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="venta : ${ventas}">
+                                    <td th:text="${venta.idVenta}"></td>
+                                    <td th:text="${#temporals.format(venta.fechaVenta, 'dd/MM/yyyy HH:mm')}"></td>
+                                    <td th:text="${venta.total}"></td>
+                                    <td th:text="${venta.estado}"></td>
+                                    <td th:text="${venta.usuario != null ? venta.usuario.username : 'N/A'}"></td>
+                                    <td>
+                                        <a th:href="@{/venta/modificar/} + ${venta.idVenta}"
+                                           class="btn btn-primary">
+                                            <i class="fas fa-pencil-alt"></i> [[#{accion.editar}]]
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <form th:action="@{/venta/eliminar}" method="post">
+                                            <input type="hidden" name="idVenta" th:value="${venta.idVenta}"/>
+                                            <button type="submit" class="btn btn-danger"
+                                                    onclick="return confirm('¿Está seguro de eliminar esta venta?');">
+                                                <i class="fas fa-trash"></i> [[#{accion.eliminar}]]
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div th:if="${ventas == null or ventas.empty}">
+                        <p>[[#{venta.noHayRegistros}]]</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section th:fragment="editarVenta(venta, usuarios)" class="py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 mx-auto">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4>[[#{venta.modificar.titulo}]]</h4>
+                        </div>
+                        <div class="card-body">
+                            <form method="post" th:action="@{/venta/guardar}" th:object="${venta}">
+                                <input type="hidden" name="idVenta" th:field="*{idVenta}"/>
+                                <div class="mb-3">
+                                    <label for="fechaVenta">[[#{venta.fechaVenta}]]</label>
+                                    <input type="datetime-local" class="form-control" name="fechaVenta" th:field="*{fechaVenta}" required="true"/>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="total">[[#{venta.total}]]</label>
+                                    <input type="number" step="0.01" class="form-control" name="total" th:field="*{total}" required="true"/>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="estado">[[#{venta.estado}]]</label>
+                                    <input type="text" class="form-control" name="estado" th:field="*{estado}"/>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="usuario">[[#{venta.usuario}]]</label>
+                                    <select class="form-select" name="usuario.idUsuario" th:field="*{usuario.idUsuario}">
+                                        <option value="">-- Seleccione un usuario --</option>
+                                        <option th:each="user : ${usuarios}"
+                                                th:value="${user.idUsuario}"
+                                                th:text="${user.username}">
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="modal-footer">
+                                    <a th:href="@{/venta/listado}" class="btn btn-secondary">
+                                        <i class="fas fa-arrow-left"></i> [[#{accion.volver}]]
+                                    </a>
+                                    <button class="btn btn-primary" type="submit">[[#{accion.guardar}]]</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+</html>
