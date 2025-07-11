@@ -1,4 +1,4 @@
-// Ubicado en src/main/java/com/UnFoldCR/domain/Usuario.java
+// Ubicado en src/main/java/com/UnFold/domain/Usuario.java
 
 package com.UnFold.domain;
 
