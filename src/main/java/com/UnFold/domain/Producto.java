@@ -17,7 +17,7 @@ public class Producto implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idProducto;
 
-    @ManyToOne //muchos Productos pueden pertenecer a una sola Categoria.
+    @ManyToOne 
     @JoinColumn(name = "id_categoria")
     private Categoria categoria; 
     private String descripcion;
