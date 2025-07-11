@@ -1,12 +1,70 @@
-/* General styling for cards */
+/* estilos.css */
+
+/* Estilos para el Header  */
+.mi-header {
+    background-color: #222222; 
+    color: #ffffff; 
+    padding-top: 0; 
+    padding-bottom: 0;
+}
+
+/* Estilos para los elementos de la barra de navegación dentro del header */
+.mi-header .navbar-brand,
+.mi-header .nav-link {
+    color: #ffffff !important; 
+}
+
+/* Estilos para los elementos de los dropdowns (menús desplegables) */
+.mi-header .dropdown-menu {
+    background-color: #000000; 
+    border-color: #333333;
+}
+
+.mi-header .dropdown-menu .dropdown-item {
+    color: #ffffff; 
+}
+
+.mi-header .dropdown-menu .dropdown-item:hover,
+.mi-header .dropdown-menu .dropdown-item:focus {
+    background-color: #333333; 
+    color: #ffffff;
+}
+
+/* Estilos para la sección del título y el ícono dentro del header */
+#main-header {
+    background-color: #1a1a1a; 
+    color: #ffffff; 
+    padding: 10px 0; 
+}
+
+#main-header h1,
+#main-header i {
+    color: #ffffff; 
+}
+
+
+/* Estilos para el Footer */
+.mi-footer {
+    background-color: #000000; 
+    color: #ffffff; 
+    padding: 15px 0; 
+    text-align: center; 
+    width: 100%; 
+}
+
+.mi-footer a {
+    color: #ffffff;
+}
+
+
 .card {
-    border-radius: 10px; /* Rounded corners for the cards */
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Subtle shadow */
-    transition: transform 0.2s ease-in-out; /* Smooth transition for hover effect */
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1); 
+    transition: transform 0.2s ease-in-out; 
 }
 
 .card:hover {
-    transform: translateY(-5px); /* Lift effect on hover */
+    transform: translateY(-5px); 
 }
 
 
@@ -64,4 +122,5 @@
         transform: translateY(0);
         opacity: 1;
     }
+}
 }
