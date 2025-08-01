@@ -2,17 +2,17 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
-    <head th:replace="~{layout/plantilla :: head}"/>
-
+    <head th:replace="~{layout/plantilla :: head(~{::title})}">
+        <title>[[#{factura.listado.titulo}]]</title> </head>
     <body>
         <header th:replace="~{layout/plantilla :: header}"/>
 
-        <section th:replace="~{categoria/fragments :: agregarCategoria}"/>
-        <section th:replace="~{categoria/fragments :: listado}"/>
-        <section th:replace="~{categoria/fragments :: editarCategoria}"/>
-        <section th:replace="~{categoria/fragments :: confirmarEliminar}"/>
+        <section th:replace="~{factura/fragmentos.html :: agregarFactura(factura=${factura}, usuarios=${usuarios})}"/>
+
+        <section th:replace="~{factura/fragmentos.html :: listadoFacturas}"/>
 
         <footer th:replace="~{layout/plantilla :: footer}"/>
         <section th:replace="~{layout/plantilla :: mostrarToast}"/>
+        <section th:replace="~{layout/plantilla :: mensajesFlash}"/>
     </body>
 </html>

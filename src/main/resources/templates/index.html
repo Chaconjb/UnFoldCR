@@ -1,12 +1,24 @@
 <!DOCTYPE html>
-
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
-    <head th:replace="~{layout/plantilla :: head}"/>
+    <head th:replace="~{layout/plantilla :: head('UnFoldCR')}"></head>
     <body>
-        <header th:replace="~{layout/plantilla :: header}"/>
+        <header th:replace="~{layout/plantilla :: header}"></header>
 
-        <footer th:replace="~{layout/plantilla :: footer}"/>  
+        <main class="container text-center my-5 d-flex flex-column align-items-center justify-content-center" style="min-height: calc(100vh - 150px);">
+            <h1 class="display-4 mb-4">[[#{aplicacion.titulo.unfold}]]</h1>
+            <p class="lead">[[#{plantilla.suTiendaUnfold}]]</p>
+            <p>Cargando la experiencia de moda...</p>
+
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">[[#{accion.cargando}]]</span>
+            </div>
+            
+            <p class="mt-4">Si la página no carga automáticamente, haga clic <a th:href="@{/categoria/visual}">aquí</a>.</p>
+        </main>
+
+        <footer th:replace="~{layout/plantilla :: footer}"></footer>
+        <section th:replace="~{layout/plantilla :: mostrarToast}"></section>
     </body>
 </html>

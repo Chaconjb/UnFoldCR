@@ -4,39 +4,37 @@ import jakarta.persistence.*; // Usa jakarta.persistence para Spring Boot 3+
 import lombok.Data;
 import java.io.Serializable;
 
-@Entity // Indica que esta clase es una entidad JPA
-@Table(name = "producto") // Mapea esta entidad a la tabla 'producto' en la base de datos
-@Data // Genera getters, setters, equals, hashCode y toString automáticamente
+@Entity 
+@Table(name = "producto") 
+@Data 
 public class Producto implements Serializable {
 
-    private static final long serialVersionUID = 1L; // Necesario para Serializable
+    private static final long serialVersionUID = 1L; 
 
     @Id // Clave primaria
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // ID autoincremental
-    @Column(name = "id_producto") // Nombre de la columna en BD
+    @GeneratedValue(strategy = GenerationType.IDENTITY) 
+    @Column(name = "id_producto") 
     private Long idProducto;
 
     private String descripcion;
     private double precio;
     private int existencias;
 
-    @Column(name = "ruta_imagen") // Nombre de la columna en BD
+    @Column(name = "ruta_imagen") 
     private String rutaImagen;
 
-    private boolean activo; // Si el producto está activo
+    private boolean activo; 
 
-    // Relación ManyToOne: Muchos productos pertenecen a una categoría
-    // @JoinColumn: Especifica la columna de la clave foránea en la tabla 'producto'
-    // name = "id_categoria": Nombre de la columna FK en la tabla 'producto' que referencia a 'categoria'
+    
     @ManyToOne
-    @JoinColumn(name = "id_categoria") // Columna FK en la tabla 'producto'
-    private Categoria categoria; // El campo 'categoria' debe coincidir con el 'mappedBy' en Categoria.java
+    @JoinColumn(name = "id_categoria") 
+    private Categoria categoria; 
 
-    // Constructor vacío requerido por JPA
+
     public Producto() {
     }
 
-    // Constructor con campos básicos (ejemplo)
+
     public Producto(String descripcion, double precio, int existencias, boolean activo) {
         this.descripcion = descripcion;
         this.precio = precio;

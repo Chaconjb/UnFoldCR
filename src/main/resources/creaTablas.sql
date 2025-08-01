@@ -83,9 +83,9 @@ DEFAULT CHARACTER SET = utf8mb4;
 
 
 INSERT INTO usuario (id_usuario, username,password,nombre, apellidos, correo, telefono,ruta_imagen,activo) VALUES
-(1,'carlosmora','$2a$10$P1.w58XvnaYQUQgZUCk4aO/RTRl8EValluCqB3S2VMLTbRt.tlre.','Carlos', 'Mora Ramirez', 'carlos.mora@unfoldcr.com', '8888-1111', 'https://example.com/carlos_perfil.jpg',true),
-(2,'anasoto','$2a$10$GkEj.ZzmQa/aEfDmtLIh3udIH5fMphx/35d0EYeqZL5uzgCJ0lQRi','Ana', 'Soto Vargas', 'ana.soto@unfoldcr.com', '7777-2222','https://example.com/ana_perfil.jpg',true),
-(3,'luisfernandez','$2a$10$koGR7eS22Pv5KdaVJKDcge04ZB53iMiw76.UjHPY.XyVYlYqXnPbO','Luis', 'Fernández Solís', 'luis.fernandez@unfoldcr.com', '6666-3333','https://example.com/luis_perfil.jpg',true);
+(1,'carlos','123','Carlos', 'Mora Ramirez', 'carlos.mora@unfoldcr.com', '8888-1111', 'https://example.com/carlos_perfil.jpg',true),
+(2,'ana','456','Ana', 'Soto Vargas', 'ana.soto@unfoldcr.com', '7777-2222','https://example.com/ana_perfil.jpg',true),
+(3,'luis','789','Luis', 'Fernández Solís', 'luis.fernandez@unfoldcr.com', '6666-3333','https://example.com/luis_perfil.jpg',true);
 
 USE unfold_cr;
 UPDATE usuario SET username = 'admin' WHERE id_usuario = 1;

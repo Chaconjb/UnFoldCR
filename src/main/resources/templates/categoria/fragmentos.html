@@ -1,16 +1,53 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns="http://www.w3.org/1999/xhtml">
-<head th:replace="~{categoria/fragmentos :: head(~{::title})}">
-    <title>[[#{categoria.listado.titulo}]]</title>
-</head>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+    <head th:replace="~{layout/plantilla :: head}"/>
 <body>
-    <header th:replace="~{categoria/fragmentos :: header}"></header>
 
-    <section th:replace="~{categoria/fragmentos :: botonesAgregar}"></section>
-    <section th:replace="~{categoria/fragmentos :: agregarCategoria}"></section>
+    <section th:fragment="agregarCategoria(categoria)" class="py-3">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3">
+                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#agregarCategoriaModal">
+                        <i class="fas fa-plus"></i> [[#{accion.agregar}]] [[#{categoria.titulo}]]
+                    </button>
+                </div>
+            </div>
+        </div>
 
-    <section class="py-4">
+        <div class="modal fade" id="agregarCategoriaModal" tabindex="-1" aria-labelledby="agregarCategoriaModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header bg-info text-white">
+                        <h5 class="modal-title" id="agregarCategoriaModalLabel">[[#{categoria.agregar.titulo}]]</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <form method="post" th:action="@{/categoria/guardar}" th:object="${categoria}" enctype="multipart/form-data">
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label for="descripcion">[[#{categoria.descripcion}]]</label>
+                                <input type="text" class="form-control" name="descripcion" th:field="*{descripcion}" required="true"/>
+                            </div>
+                            <div class="mb-3">
+                                <label for="activo">[[#{categoria.activo}]]</label>
+                                <input type="checkbox" name="activo" th:field="*{activo}"/>
+                            </div>
+                            <div class="mb-3">
+                                <label for="imagenFile">[[#{categoria.imagen}]]</label>
+                                <input type="file" name="imagenFile" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-primary" type="submit">[[#{accion.guardar}]]</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section th:fragment="listadoCategorias" class="py-4">
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
@@ -39,12 +76,11 @@
                                         </a>
                                     </td>
                                     <td>
-                                        <form th:action="@{/categoria/eliminar}" method="post">
-                                            <input type="hidden" name="idCategoria" th:value="${categoria.idCategoria}"/>
-                                            <button type="submit" class="btn btn-danger">
-                                                <i class="fas fa-trash"></i> [[#{accion.eliminar}]]
-                                            </button>
-                                        </form>
+                                        <a th:href="@{/categoria/eliminar/} + ${categoria.idCategoria}"
+                                           class="btn btn-danger"
+                                           onclick="return confirm('¿Está seguro de eliminar esta categoría?');">
+                                            <i class="fas fa-trash"></i> [[#{accion.eliminar}]]
+                                        </a>
                                     </td>
                                 </tr>
                             </tbody>
@@ -58,6 +94,46 @@
         </div>
     </section>
 
-    <footer th:replace="~{categoria/fragmentos :: footer}"></footer>
+    <section th:fragment="editarCategoria(categoria)" class="py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 mx-auto">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4>[[#{categoria.modificar.titulo}]]</h4>
+                        </div>
+                        <div class="card-body">
+                            <form method="post" th:action="@{/categoria/guardar}" th:object="${categoria}" enctype="multipart/form-data">
+                                <input type="hidden" name="idCategoria" th:field="*{idCategoria}"/>
+                                <input type="hidden" name="rutaImagen" th:field="*{rutaImagen}"/>
+                                <div class="mb-3">
+                                    <label for="descripcion">[[#{categoria.descripcion}]]</label>
+                                    <input type="text" class="form-control" name="descripcion" th:field="*{descripcion}" required="true"/>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="activo">[[#{categoria.activo}]]</label>
+                                    <input type="checkbox" name="activo" th:field="*{activo}"/>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="imagenFile">[[#{categoria.imagen}]]</label>
+                                    <input type="file" name="imagenFile" class="form-control" />
+                                </div>
+                                <div th:if="${categoria.rutaImagen != null and categoria.rutaImagen != ''}" class="mb-3">
+                                    <label>Imagen Actual:</label><br/>
+                                    <img th:src="${categoria.rutaImagen}" alt="Imagen Actual" style="max-width: 150px;"/>
+                                </div>
+                                <div class="modal-footer">
+                                    <a th:href="@{/categoria/listado}" class="btn btn-secondary">
+                                        <i class="fas fa-arrow-left"></i> [[#{accion.volver}]]
+                                    </a>
+                                    <button class="btn btn-primary" type="submit">[[#{accion.guardar}]]</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 </body>
 </html>

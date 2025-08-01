@@ -1,51 +1,32 @@
 package com.UnFold.domain;
 
-import jakarta.persistence.*; // Usa jakarta.persistence para Spring Boot 3+
-import lombok.Data;
+
+import jakarta.persistence.*;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
+import lombok.Data;
 
-@Entity
-@Table(name = "usuario")
 @Data
+@Entity
+@Table(name="usuario")
 public class Usuario implements Serializable {
-
     private static final long serialVersionUID = 1L;
-
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_usuario")
     private Long idUsuario;
-
-    @Column(unique = true) // El username debe ser único
     private String username;
-
-    private String password; // Considera encriptar contraseñas
+    private String password;
     private String nombre;
     private String apellidos;
     private String correo;
     private String telefono;
-
-    @Column(name = "ruta_imagen")
-    private String rutaImagen; // Para foto de perfil del usuario
-
-    private boolean activo;
-
-    // Relación OneToMany: Un usuario puede tener muchas facturas (o ventas)
-    // Asumo que 'Factura' tiene un campo 'usuario' que mapea a esta relación.
-    // También podrías tener una relación con Venta si tu diseño lo requiere.
-    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Factura> facturas = new ArrayList<>(); // O List<Venta> si mapeas ventas directamente
-
-    // Constructor vacío
-    public Usuario() {
-    }
-
-    // Constructor con username y password (ejemplo)
-    public Usuario(String username, String password, boolean activo) {
-        this.username = username;
-        this.password = password;
-        this.activo = activo;
-    }
+    private String rutaImagen;
+    private boolean activo; 
+    
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name="idUsuario",updatable = false)
+    private List<Rol> roles;
+    
 }
+
