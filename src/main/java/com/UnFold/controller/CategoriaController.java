@@ -86,17 +86,16 @@ public class CategoriaController {
         return "categoria/modifica";
     }
 
-    // Método para la vista de todas las categorías (tu código original)
     @GetMapping("/visual")
     public String visualCategories(Model model) {
         log.info("Cargando la vista visual de categorías (pública).");
         List<Producto> allActiveProducts = productoService.getProductos(true);
 
-        // Se obtienen las categorías para el menú, como siempre
+        
         var categorias = categoriaService.getCategorias(true);
         model.addAttribute("categorias", categorias);
 
-        // Se filtran y limitan los productos para cada sección de la vista
+
         model.addAttribute("productosHombre", allActiveProducts.stream()
                 .filter(p -> p.getCategoria() != null && "Hombre".equalsIgnoreCase(p.getCategoria().getDescripcion()))
                 .limit(4)
@@ -117,14 +116,13 @@ public class CategoriaController {
                 .limit(4)
                 .collect(Collectors.toList()));
 
-        // La vista de todas las categorías no tiene un título de categoría específico
+     
         model.addAttribute("categoriaNombre", null);
 
         return "categoria/visual";
     }
 
-    // Método dinámico para mostrar el detalle de una categoría específica
-    // Reemplaza los enlaces estáticos del código original
+    
     @GetMapping("/{descripcion}")
     public String categoriaDetalle(@PathVariable("descripcion") String descripcion, Model model) {
         log.info("Accediendo a la categoría: " + descripcion);
@@ -133,12 +131,12 @@ public class CategoriaController {
         var categorias = categoriaService.getCategorias(true);
         model.addAttribute("categorias", categorias);
 
-        // Usa el servicio para obtener los productos de la categoría específica
+    
         List<Producto> productos = productoService.getProductosByCategoriaDescripcion(descripcion, true);
         model.addAttribute("productos", productos);
         model.addAttribute("categoriaNombre", descripcion);
 
-        // Se limpian las listas para evitar que se muestren en la vista de detalle
+      
         model.addAttribute("productosHombre", null);
         model.addAttribute("productosMujer", null);
         model.addAttribute("productosNinos", null);
