@@ -1,0 +1,127 @@
+/* estilos.css */
+
+/* Estilos para el Header  */
+.mi-header {
+    background-color: #222222; 
+    color: #ffffff; 
+    padding-top: 0; 
+    padding-bottom: 0;
+}
+
+/* Estilos para los elementos de la barra de navegación dentro del header */
+.mi-header .navbar-brand,
+.mi-header .nav-link {
+    color: #ffffff !important; 
+}
+
+/* Estilos para los elementos de los dropdowns (menús desplegables) */
+.mi-header .dropdown-menu {
+    background-color: #000000; 
+    border-color: #333333;
+}
+
+.mi-header .dropdown-menu .dropdown-item {
+    color: #ffffff; 
+}
+
+.mi-header .dropdown-menu .dropdown-item:hover,
+.mi-header .dropdown-menu .dropdown-item:focus {
+    background-color: #333333; 
+    color: #ffffff;
+}
+
+/* Estilos para la sección del título y el ícono dentro del header */
+#main-header {
+    background-color: #1a1a1a; 
+    color: #ffffff; 
+    padding: 10px 0; 
+}
+
+#main-header h1,
+#main-header i {
+    color: #ffffff; 
+}
+
+
+/* Estilos para el Footer */
+.mi-footer {
+    background-color: #000000; 
+    color: #ffffff; 
+    padding: 15px 0; 
+    text-align: center; 
+    width: 100%; 
+}
+
+.mi-footer a {
+    color: #ffffff;
+}
+
+
+.card {
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1); 
+    transition: transform 0.2s ease-in-out; 
+}
+
+.card:hover {
+    transform: translateY(-5px); 
+}
+
+
+.card-img-top {
+    background-color: #dcdcdc; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    color: #666; 
+    font-style: italic;
+    font-size: 0.9em;
+    border-top-left-radius: 10px; 
+    border-top-right-radius: 10px; 
+    height: 200px; 
+    object-fit: cover; 
+}
+
+
+.placeholder-card {
+    background-color: #f0f0f0; 
+    border: 1px dashed #ccc; 
+    color: #888;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.d-flex.align-items-center.justify-content-center {
+    width: 100%; 
+}
+
+.row.flex-grow-1 {
+    flex-basis: 0; 
+    flex-grow: 1; 
+}
+
+
+.dropdown-menu.submenu {
+    position: absolute;
+    left: 100%; 
+    top: 0; 
+    margin-top: -1px; 
+}
+
+.custom-modal-animation .modal-content.animate-slide-up {
+    animation: slideUp 0.3s ease-out forwards;
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+}
