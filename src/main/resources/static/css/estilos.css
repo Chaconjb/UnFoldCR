@@ -1,0 +1,67 @@
+/* General styling for cards */
+.card {
+    border-radius: 10px; /* Rounded corners for the cards */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Subtle shadow */
+    transition: transform 0.2s ease-in-out; /* Smooth transition for hover effect */
+}
+
+.card:hover {
+    transform: translateY(-5px); /* Lift effect on hover */
+}
+
+
+.card-img-top {
+    background-color: #dcdcdc; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    color: #666; 
+    font-style: italic;
+    font-size: 0.9em;
+    border-top-left-radius: 10px; 
+    border-top-right-radius: 10px; 
+    height: 200px; 
+    object-fit: cover; 
+}
+
+
+.placeholder-card {
+    background-color: #f0f0f0; 
+    border: 1px dashed #ccc; 
+    color: #888;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.d-flex.align-items-center.justify-content-center {
+    width: 100%; 
+}
+
+.row.flex-grow-1 {
+    flex-basis: 0; 
+    flex-grow: 1; 
+}
+
+
+.dropdown-menu.submenu {
+    position: absolute;
+    left: 100%; 
+    top: 0; 
+    margin-top: -1px; 
+}
+
+.custom-modal-animation .modal-content.animate-slide-up {
+    animation: slideUp 0.3s ease-out forwards;
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}

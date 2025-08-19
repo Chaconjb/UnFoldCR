@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+    <head th:replace="~{layout/plantilla :: head(~{::title})}">
+        <title>[[#{factura.modificar.titulo}]]</title>
+    </head>
+    <body>
+        <header th:replace="~{layout/plantilla :: header}"/>
+        
+        <section th:replace="~{factura/fragmentos.html :: editarFactura(factura, usuarios)}"/>
+        
+        <footer th:replace="~{layout/plantilla :: footer}"/>
+        <section th:replace="~{layout/plantilla :: mostrarToast}"/>
+        <section th:replace="~{layout/plantilla :: mensajesFlash}"/>
+    </body>
+</html>

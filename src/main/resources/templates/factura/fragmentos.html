@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+    <head th:replace="~{layout/plantilla :: head}"/>
+<body>
+
+    <section th:fragment="agregarFactura(factura, usuarios)" class="py-3">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3">
+                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#agregarFacturaModal">
+                        <i class="fas fa-plus"></i> [[#{accion.agregar}]] [[#{factura.titulo}]]
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="agregarFacturaModal" tabindex="-1" aria-labelledby="agregarFacturaModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header bg-info text-white">
+                        <h5 class="modal-title" id="agregarFacturaModalLabel">[[#{factura.agregar.titulo}]]</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <form method="post" th:action="@{/factura/guardar}" th:object="${factura}">
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label for="usuario">[[#{factura.usuario}]]</label>
+                                <select th:field="*{usuario.idUsuario}" class="form-control" required="true" id="usuario">
+                                    <option value="">[[#{factura.seleccionarUsuario}]]</option>
+                                    <option th:each="user : ${usuarios}"
+                                            th:value="${user.idUsuario}"
+                                            th:text="${user.username}"           th:selected="${factura.usuario != null and factura.usuario.idUsuario == user.idUsuario}">
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="total">[[#{factura.total}]]</label>
+                                <input type="number" step="0.01" class="form-control" name="total" th:field="*{total}" required="true" id="total"/>
+                            </div>
+                            <div class="mb-3">
+                                <label for="estado">[[#{factura.estado}]]</label>
+                                <input type="text" class="form-control" name="estado" th:field="*{estado}" required="true" id="estado"/>
+                            </div>
+                            </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-primary" type="submit">[[#{accion.guardar}]]</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section th:fragment="listadoFacturas" class="py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div th:if="${facturas != null and !facturas.empty}">
+                        <table class="table table-striped table-hover">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th>[[#{factura.id}]]</th>
+                                    <th>[[#{factura.usuario}]]</th>
+                                    <th>[[#{factura.fecha}]]</th>
+                                    <th>[[#{factura.total}]]</th>
+                                    <th>[[#{factura.estado}]]</th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="fact : ${facturas}">
+                                    <td th:text="${fact.idFactura}"></td>
+                                    <td th:text="${fact.usuario != null ? fact.usuario.username : 'N/A'}"></td> <td th:text="${#temporals.format(fact.fechaFacturacion, 'dd/MM/yyyy HH:mm')}"></td>
+                                    <td th:text="${#numbers.formatCurrency(fact.total)}"></td>
+                                    <td th:text="${fact.estado}"></td>
+                                    <td>
+                                        <a th:href="@{/factura/modificar/} + ${fact.idFactura}"
+                                           class="btn btn-primary">
+                                            <i class="fas fa-pencil-alt"></i> [[#{accion.editar}]]
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <form th:action="@{/factura/eliminar}" method="post">
+                                            <input type="hidden" name="idFactura" th:value="${fact.idFactura}" />
+                                            <button type="submit" class="btn btn-danger" onclick="return confirm('¿Está seguro de eliminar esta factura?');">
+                                                <i class="fas fa-trash"></i> [[#{accion.eliminar}]]
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div th:if="${facturas == null or facturas.empty}">
+                        <p>[[#{factura.noHayRegistros}]]</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section th:fragment="editarFactura(factura, usuarios)" class="py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 mx-auto">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4>[[#{factura.modificar.titulo}]]</h4>
+                        </div>
+                        <div class="card-body">
+                            <form method="post" th:action="@{/factura/guardar}" th:object="${factura}">
+                                <input type="hidden" name="idFactura" th:field="*{idFactura}"/>
+                                <input type="hidden" name="fechaFacturacion" th:field="*{fechaFacturacion}"/>
+                                <div class="mb-3">
+                                    <label for="usuarioEditar">[[#{factura.usuario}]]</label>
+                                    <select th:field="*{usuario.idUsuario}" class="form-control" required="true" id="usuarioEditar">
+                                        <option value="">[[#{factura.seleccionarUsuario}]]</option>
+                                        <option th:each="user : ${usuarios}"
+                                                th:value="${user.idUsuario}"
+                                                th:text="${user.username}"           th:selected="${factura.usuario != null and factura.usuario.idUsuario == user.idUsuario}">
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="totalEditar">[[#{factura.total}]]</label>
+                                    <input type="number" step="0.01" class="form-control" name="total" th:field="*{total}" required="true" id="totalEditar"/>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="estadoEditar">[[#{factura.estado}]]</label>
+                                    <input type="text" class="form-control" name="estado" th:field="*{estado}" required="true" id="estadoEditar"/>
+                                </div>
+                                <div class="modal-footer">
+                                    <a th:href="@{/factura/listado}" class="btn btn-secondary">
+                                        <i class="fas fa-arrow-left"></i> [[#{accion.volver}]]
+                                    </a>
+                                    <button class="btn btn-primary" type="submit">[[#{accion.guardar}]]</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+</html>
