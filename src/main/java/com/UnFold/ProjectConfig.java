@@ -8,13 +8,10 @@ import java.util.Locale;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.crypto.password.PasswordEncoder; // Importación correcta
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -28,7 +25,6 @@ import org.thymeleaf.templatemode.TemplateMode;
 @Configuration
 public class ProjectConfig implements WebMvcConfigurer {
 
-    /* Los siguientes métodos son para implementar el tema de seguridad dentro del proyecto */
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/").setViewName("index");
@@ -37,11 +33,8 @@ public class ProjectConfig implements WebMvcConfigurer {
         registry.addViewController("/iframes").setViewName("iframes");
         registry.addViewController("/login").setViewName("login");
         registry.addViewController("/registro/nuevo").setViewName("/registro/nuevo");
-        registry.addViewController("/conocenos").setViewName("conocenos");
-    
     }
 
-    /* El siguiente método se utilizar para publicar en la nube, independientemente */
     @Bean
     public SpringResourceTemplateResolver templateResolver_0() {
         SpringResourceTemplateResolver resolver = new SpringResourceTemplateResolver();
@@ -85,31 +78,25 @@ public class ProjectConfig implements WebMvcConfigurer {
         List<Ruta> rutas = rutaService.getRutas();
 
         http.authorizeHttpRequests((request) -> {
-            // Añade explícitamente la ruta principal y los recursos estáticos como permitidos
-            request.requestMatchers("/", "/index", "/css/**", "/js/**", "/img/**", "/fav/**").permitAll(); //
-
-            // ... (el resto de tu lógica para las rutas)
-            request.requestMatchers(rutasPermit).permitAll(); //
-
-            for (Ruta ruta : rutas) { //
-                request.requestMatchers(ruta.getPatron()) //
-                        .hasRole(ruta.getRolName()); //
+            request.requestMatchers(rutasPermit).permitAll();
+            for (Ruta ruta : rutas) {
+                request.requestMatchers(ruta.getPatron())
+                       .hasRole(ruta.getRolName());
             }
-            request.anyRequest().authenticated(); //
+            request.anyRequest().authenticated();
         })
-                .formLogin((form) -> form
-                .loginPage("/login").permitAll()) //
-                .logout((logout) -> logout.permitAll()); //
-
-        return http.build(); //
+        .formLogin((form) -> form
+            .loginPage("/login").permitAll())
+        .logout((logout) -> logout.permitAll());
+        
+        return http.build();
     }
-
-    @Autowired
-    private UserDetailsService userDetailsService;
-
-    @Autowired
-    public void configurerGlobal(AuthenticationManagerBuilder build) throws Exception {
-        build.userDetailsService(userDetailsService)
-                .passwordEncoder(new BCryptPasswordEncoder());
+    
+    // Eliminamos el @Autowired de UserDetailsService
+    // Eliminamos el método configurerGlobal
+    
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 }
