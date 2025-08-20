@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
+      xmlns="http://www.w3.org/1999/xhtml">
+    
+    <section th:fragment="ventasPorFecha">
+        <section class="py-4 mb-4 bg-light">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-9">
+                        <h1>Reporte de Ventas por Fecha</h1>
+                    </div>
+                </div>
+            </div>
+        </section>
+    
+        <section class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4>Generar Reporte por Fecha</h4>
+                        </div>
+                        <div class="card-body">
+                            <form th:action="@{/reportes/generarPorFecha}" method="get">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label for="fechaInicial">Fecha Inicial:</label>
+                                        <input type="date" id="fechaInicial" name="fechaInicial" class="form-control" required/>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="fechaFinal">Fecha Final:</label>
+                                        <input type="date" id="fechaFinal" name="fechaFinal" class="form-control" required/>
+                                    </div>
+                                    <div class="col-md-4 align-self-end">
+                                        <button type="submit" class="btn btn-primary btn-block mt-4">Generar Reporte</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    
+            <div th:if="${ventas}" class="mt-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Resultados del Reporte</h4>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>ID Venta</th>
+                                    <th>Producto</th>
+                                    <th>Cantidad</th>
+                                    <th>Fecha</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="venta : ${ventas}">
+                                    <td th:text="${venta.idVenta}"></td>
+                                    <td th:text="${venta.idProducto}"></td>
+                                    <td th:text="${venta.cantidad}"></td>
+                                    <td th:text="${venta.fecha}"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </section>
+
+</html>

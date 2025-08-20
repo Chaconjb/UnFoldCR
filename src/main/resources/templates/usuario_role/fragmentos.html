@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+    <head th:replace="~{general/fragmentos :: head}">
+        <title>TechShop</title>
+    </head>
+    <body>
+        <section th:fragment="asignar">
+            <div class="row">
+                <form method="GET"
+                      th:action="@{/usuario_role/asignar}"
+                      th:object="${usuario}"
+                      class="was-validated">
+                    <div class="m-3">
+                        <label>[[#{usuario.nombre}]]</label>
+                        <input type="text" name="username" th:field="*{username}"/>
+                    </div>
+                    <div class="m-3">
+                        <button type="submit" class="btn btn-success">
+                            <i class="fas fa-seach"></i> [[#{accion.buscar}]]
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <div class="row" th:if="${usuario !=null}">
+                <div class="col-3 m-3 p-3">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4>[[#{plantilla.tusuario}]]</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label>[[#{usuario.nombre}]]</label>
+                                <label>[[${usuario.nombre}]]</label>                                
+                            </div>
+                            <div class="mb-3">
+                                <label>[[#{usuario.apellidos}]]</label>
+                                <label>[[${usuario.apellidos}]]</label>
+                            </div>
+                            <div class="mb-3">
+                                <label>[[#{usuario.correo}]]</label>
+                                <label>[[${usuario.correo}]]</label>
+                            </div>
+                            <div class="mb-3">
+                                <label>[[#{usuario.telefono}]]</label>
+                                <label>[[${usuario.telefono}]]</label>
+                            </div>
+                            <div class="mb-3">                              
+                                <img th:src="@{${usuario.rutaImagen}}" alt="" height="200"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-3 m-3 p-3">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4>[[#{role.usuario}]]</h4>
+                        </div>
+                        <div class="card-body">                            
+                            <table class="table table-hover">
+                                <tbody>
+                                    <tr th:each="rol : ${rolesAsignados}">
+                                        <td>[[${rol.nombre}]]</td>
+                                        <td sec:authorize="hasRole('ROLE_ADMIN')">
+                                            <form method="get" action="/usuario_role/eliminar">
+                                                <input type="hidden" name="idRol" th:value="${rol.idRol}"/>
+                                                <input type="hidden" name="username" th:value="${usuario.username}"/>
+                                                <button class="btn btn-warning" type="submit">
+                                                    <i class="fas fa-trash"></i> [[#{accion.eliminar}]]</a></button>
+                                            </form></td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-3 m-3 p-3">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4>[[#{role.total}]]</h4>
+                        </div>
+                        <div class="card-body">
+                            <table class="table table-hover">
+                                <tbody>
+                                    <tr th:each="rol : ${rolesDisponibles}">
+                                        <td>[[${rol}]]</td>
+                                        <td sec:authorize="hasRole('ROLE_ADMIN')">
+                                            <form method="get" action="/usuario_role/agregar">
+                                                <input type="hidden" name="idUsuario" th:value="${idUsuario}"/>
+                                                <input type="hidden" name="nombre" th:value="${rol}"/>
+                                                <input type="hidden" name="username" th:value="${usuario.username}"/>
+                                                <button class="btn btn-success" type="submit">
+                                                    <i class="fas fa-plus-square"></i> [[#{accion.agregar}]]
+                                                </button>
+                                            </form>                                            
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </body>
+</html>
