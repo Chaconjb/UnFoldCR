@@ -1,5 +1,4 @@
 package com.UnFold.service;
-
 import com.UnFold.domain.Rol;
 import com.UnFold.domain.Usuario;
 import com.UnFold.repository.UsuarioRepository;

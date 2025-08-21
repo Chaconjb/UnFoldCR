@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+    <head th:replace="~{layout/plantilla :: head(~{::title})}">
+        <title>[[#{plantilla.loMasBuscado}]]</title>
+    </head>
+    <body>
+        <header th:replace="~{layout/plantilla :: header}"></header>
+
+        <section class="py-5">
+            <div class="container">
+                <h1>[[#{plantilla.loMasBuscado}]]</h1>
+                <p>Aquí puedes agregar los productos más populares o una sección de tendencias.</p>
+            </div>
+        </section>
+
+        <footer th:replace="~{layout/plantilla :: footer}"></footer>
+        <section th:replace="~{layout/plantilla :: mostrarToast}"></section>
+    </body>
+</html>

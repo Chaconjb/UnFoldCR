@@ -74,26 +74,29 @@ public class ProjectConfig implements WebMvcConfigurer {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        String[] rutasPermit = rutaPermitService.getRutaPermitsString();
-        List<Ruta> rutas = rutaService.getRutas();
+    String[] rutasPermit = rutaPermitService.getRutaPermitsString();
+    List<Ruta> rutas = rutaService.getRutas();
 
-        http.authorizeHttpRequests((request) -> {
-            request.requestMatchers(rutasPermit).permitAll();
-            for (Ruta ruta : rutas) {
-                request.requestMatchers(ruta.getPatron())
-                       .hasRole(ruta.getRolName());
-            }
-            request.anyRequest().authenticated();
-        })
-        .formLogin((form) -> form
-            .loginPage("/login").permitAll())
-        .logout((logout) -> logout.permitAll());
+    http.authorizeHttpRequests((request) -> {
+        // Permitir el acceso a los recursos estáticos sin autenticación
+        request.requestMatchers("/css/**", "/js/**", "/webjars/**", "/fav/**").permitAll();
         
-        return http.build();
-    }
+        // Mantener tu lógica para rutas dinámicas
+        request.requestMatchers(rutasPermit).permitAll();
+        for (Ruta ruta : rutas) {
+            request.requestMatchers(ruta.getPatron())
+                   .hasRole(ruta.getRolName());
+        }
+        
+        request.anyRequest().authenticated();
+    })
+    .formLogin((form) -> form
+        .loginPage("/login").permitAll())
+    .logout((logout) -> logout.permitAll());
     
-    // Eliminamos el @Autowired de UserDetailsService
-    // Eliminamos el método configurerGlobal
+    return http.build();
+    }    
+   
     
     @Bean
     public PasswordEncoder passwordEncoder() {

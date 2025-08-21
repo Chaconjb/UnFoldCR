@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+    <head th:replace="~{layout/plantilla :: head(~{::title})}">
+        <title>[[#{plantilla.contactanos}]]</title>
+    </head>
+    <body>
+        <header th:replace="~{layout/plantilla :: header}"></header>
+
+        <section class="py-5">
+            <div class="container">
+                <h1>[[#{plantilla.contactanos}]]</h1>
+                <p>Puedes crear un formulario de contacto para que los usuarios envíen sus consultas.</p>
+            </div>
+        </section>
+
+        <footer th:replace="~{layout/plantilla :: footer}"></footer>
+        <section th:replace="~{layout/plantilla :: mostrarToast}"></section>
+    </body>
+</html>

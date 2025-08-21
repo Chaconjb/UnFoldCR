@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+    <head th:replace="~{layout/plantilla :: head(~{::title})}">
+        <title>[[#{plantilla.infoSoporte}]]</title>
+    </head>
+    <body>
+        <header th:replace="~{layout/plantilla :: header}"></header>
+
+        <section class="py-5">
+            <div class="container">
+                <h1>[[#{plantilla.infoSoporte}]]</h1>
+                <p>Aquí puedes agregar una sección de preguntas frecuentes o una guía de ayuda para los usuarios.</p>
+            </div>
+        </section>
+
+        <footer th:replace="~{layout/plantilla :: footer}"></footer>
+        <section th:replace="~{layout/plantilla :: mostrarToast}"></section>
+    </body>
+</html>
